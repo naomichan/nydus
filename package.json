@@ -1,0 +1,41 @@
+{
+  "name": "nydus",
+  "version": "1.0.0",
+  "description": "A HeroProtocol adapter for JS written in TypeScript",
+  "main": "dist/nydus.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/naomichan/nydus.git"
+  },
+  "scripts": {
+    "prepare": "tsc -p tsconfig.json --outDir dist"
+  },
+  "keywords": [
+    "heroes",
+    "storm",
+    "hots",
+    "heroprotocol",
+    "replay"
+  ],
+  "author": "Yuki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naomichan/nydus/issues"
+  },
+  "homepage": "https://github.com/naomichan/nydus#readme",
+  "bin": {
+    "heroes-nydus-gen": "dist/bin/nydusgen.js"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.14",
+    "@types/node": "^8.0.33",
+    "@types/request": "^2.0.4",
+    "typescript": "^2.5.3"
+  },
+  "typeScriptVersion": "2.5",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "mpyqjs": "^1.0.1",
+    "request": "^2.83.0"
+  }
+}

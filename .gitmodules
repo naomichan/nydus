@@ -1,0 +1,3 @@
+[submodule "def/protocol"]
+	path = def/protocol
+	url = https://github.com/Blizzard/heroprotocol.git
