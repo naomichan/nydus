@@ -15,12 +15,15 @@ const req = require("request");
 const request = bluebird_1.promisify(req);
 const writeFileAsync = bluebird_1.promisify(fs_1.writeFile);
 const existsAsync = bluebird_1.promisify(fs_1.exists);
-function Overmind(dir, version) {
+function Overmind(dir, version, shouldDownload = false) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const fd = path_1.resolve(dir, `protocol${version}.js`);
             if (yield existsAsync(fd)) {
                 return require(fd);
+            }
+            if (!shouldDownload) {
+                return null;
             }
             const response = yield request({ url: `https://raw.githubusercontent.com/Blizzard/heroprotocol/master/protocol${version}.py`, method: "GET" });
             if (response.statusCode !== 200) {

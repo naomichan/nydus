@@ -16,11 +16,14 @@ const request = promisify(req);
 const writeFileAsync = promisify(writeFile);
 const existsAsync = promisify(exists);
 
-export async function Overmind(dir: string, version: number): Promise<any> {
+export async function Overmind(dir: string, version: number, shouldDownload: boolean = false): Promise<any> {
     try {
       const fd: string = resolve(dir, `protocol${version}.js`);
       if(await existsAsync(fd)) {
         return require(fd);
+      }
+      if(!shouldDownload) {
+        return null;
       }
       const response: req.RequestResponse = await request({url: `https://raw.githubusercontent.com/Blizzard/heroprotocol/master/protocol${version}.py`, method: "GET"});
       if(response.statusCode !== 200) {
