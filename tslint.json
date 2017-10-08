@@ -6,7 +6,11 @@
     "jsRules": {},
     "rules": {
         "whitespace": false,
-        "no-console": false
+        "no-console": false,
+        "max-line-length": false,
+        "max-classes-per-file": false,
+        "no-bitwise": false,
+        "ban-types": false
     },
     "rulesDirectory": []
 }

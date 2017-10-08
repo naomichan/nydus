@@ -18,17 +18,15 @@ function Parse(value) {
 }
 function Create(version, typeInfos, gameEventTypes, gameEventTypeId, messageEventTypes, messageEventTypeId, trackerEventTypes, trackerEventTypeId, sVarUint32TypeId, userTypeId, headerTypeId, gameDetailsTypeId, initDataTypeId) {
     return TPL `// Generated from protocol${version}.py
-export var VERSION = ${version};
+exports.VERSION = ${version};
 
-export var TYPE_INFO = ${typeInfos};
+exports.TYPE_INFO = ${typeInfos};
 
-export var GAME_EVENT = [${gameEventTypeId}, ${gameEventTypes}];
-export var MESSAGE_EVENT = [${messageEventTypeId}, ${messageEventTypes}];
-export var TRACKER_EVENT = [${trackerEventTypeId}, ${trackerEventTypes}];
+exports.GAME_EVENT = [${gameEventTypeId}, ${gameEventTypes}];
+exports.MESSAGE_EVENT = [${messageEventTypeId}, ${messageEventTypes}];
+exports.TRACKER_EVENT = [${trackerEventTypeId}, ${trackerEventTypes}];
 
-export var REPLAY = [${sVarUint32TypeId}, ${userTypeId}, ${headerTypeId}, ${gameDetailsTypeId}, ${initDataTypeId}];
-
-export default { VERSION, TYPE_INFO, GAME_EVENT, MESSAGE_EVENT, TRACKER_EVENT, REPLAY };
+exports.REPLAY = [${sVarUint32TypeId}, ${userTypeId}, ${headerTypeId}, ${gameDetailsTypeId}, ${initDataTypeId}];
 `;
 }
 function FixL(line) {
