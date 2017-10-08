@@ -1,2 +1,3 @@
 node_modules
 def/versioned/*.js
+src/**/*.js
