@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 // Goal: Write a tool utility file that is capable of converting Blizzard/heroprotocol.ts files without issue.
 // Secondary goal: a library that can download .py files for unrecognized replay versions
 //
@@ -5,8 +7,30 @@
 // we only need to store those, thus it's easy to automate.
 //
 
-export class Overmind {
+import { promisify } from "bluebird";
+import { exists, writeFile } from "fs";
+import { resolve } from "path";
+import * as req from "request";
 
+const request = promisify(req);
+const writeFileAsync = promisify(writeFile);
+const existsAsync = promisify(exists);
+
+export async function Overmind(dir: string, version: number): Promise<any> {
+    try {
+      const fd: string = resolve(dir, `protocol${version}.js`);
+      if(await existsAsync(fd)) {
+        return require(fd);
+      }
+      const response: req.RequestResponse = await request({url: `https://raw.githubusercontent.com/Blizzard/heroprotocol/master/protocol${version}.py`, method: "GET"});
+      if(response.statusCode !== 200) {
+        return null;
+      }
+      await writeFileAsync(fd, Generate(response.body, version));
+      return require(fd);
+    } catch {
+      return null;
+    }
 }
 
 function TPL(strings: TemplateStringsArray, ...keys: any[]): string {

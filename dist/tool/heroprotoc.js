@@ -1,6 +1,38 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-class Overmind {
+const bluebird_1 = require("bluebird");
+const fs_1 = require("fs");
+const path_1 = require("path");
+const req = require("request");
+const request = bluebird_1.promisify(req);
+const writeFileAsync = bluebird_1.promisify(fs_1.writeFile);
+const existsAsync = bluebird_1.promisify(fs_1.exists);
+function Overmind(dir, version) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const fd = path_1.resolve(dir, `protocol${version}.js`);
+            if (yield existsAsync(fd)) {
+                return require(fd);
+            }
+            const response = yield request({ url: `https://raw.githubusercontent.com/Blizzard/heroprotocol/master/protocol${version}.py`, method: "GET" });
+            if (response.statusCode !== 200) {
+                return null;
+            }
+            yield writeFileAsync(fd, Generate(response.body, version));
+            return require(fd);
+        }
+        catch (_a) {
+            return null;
+        }
+    });
 }
 exports.Overmind = Overmind;
 function TPL(strings, ...keys) {

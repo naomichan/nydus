@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 // Goal: Generic file for exception classes
 //
 
