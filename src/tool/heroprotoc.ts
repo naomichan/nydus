@@ -104,14 +104,14 @@ export function Generate(contents: string, version: number): string {
   const gameEventTypes: {[key: number]: any} = {};
   const messageEventTypes: {[key: number]: any} = {};
   const trackerEventTypes: {[key: number]: any} = {};
-  let messageEventTypeId: number = 0;
-  let gameEventTypeId: number = 0;
-  let trackerEventTypeId: number = 0;
-  let sVarUint32TypeId: number = 0;
-  let userTypeId: number = 0;
-  let headerTypeId: number = 0;
-  let gameDetailsTypeId: number = 0;
-  let initDataTypeId: number = 0;
+  let messageEventTypeId: number = -1;
+  let gameEventTypeId: number = -1;
+  let trackerEventTypeId: number = -1;
+  let sVarUint32TypeId: number = -1;
+  let userTypeId: number = -1;
+  let headerTypeId: number = -1;
+  let gameDetailsTypeId: number = -1;
+  let initDataTypeId: number = -1;
 
   let state: number = 0;
 
