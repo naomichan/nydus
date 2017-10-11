@@ -8,15 +8,16 @@
 //
 
 import { promisify } from "bluebird";
-import { exists, writeFile } from "fs";
-import { resolve } from "path";
+import { exists, readdir, writeFile } from "fs";
+import { basename, resolve } from "path";
 import * as req from "request";
 
 const request = promisify(req);
-const writeFileAsync = promisify(writeFile);
 const existsAsync = promisify(exists);
+const readdirAsync = promisify(readdir);
+const writeFileAsync = promisify(writeFile);
 
-export async function Overmind(dir: string, version: number, shouldDownload: boolean = false): Promise<any> {
+export async function Overmind(dir: string, version: number, shouldDownload: boolean = false): Promise<NYDUS_PROTOCOL | null> {
     try {
       const fd: string = resolve(dir, `protocol${version}.js`);
       if(await existsAsync(fd)) {
@@ -31,6 +32,28 @@ export async function Overmind(dir: string, version: number, shouldDownload: boo
       }
       await writeFileAsync(fd, Generate(response.body, version));
       return require(fd);
+    } catch {
+      return null;
+    }
+}
+
+export async function Latest(dir: string): Promise<NYDUS_PROTOCOL | null> {
+    try {
+      const files: string[] = await readdirAsync(dir);
+      const newest: [number, string] = [0, ""];
+      files.forEach((file) => {
+        if(basename(file).startsWith("protocol")) {
+          const ver: number = parseInt(basename(file).substr(8).split(".")[0], 10);
+          if(ver > newest[0]) {
+            newest[0] = ver;
+            newest[1] = resolve(dir, basename(file));
+          }
+        }
+      });
+      if(newest[0] > 0) {
+        return require(newest[1]);
+      }
+      return null;
     } catch {
       return null;
     }

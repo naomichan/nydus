@@ -2,7 +2,7 @@
   "name": "nydus",
   "version": "1.0.0",
   "description": "A HeroProtocol adapter for JS written in TypeScript",
-  "main": "dist/nydus.js",
+  "main": "dist/src/nydus.js",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/naomichan/nydus.git"
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/naomichan/nydus#readme",
   "bin": {
-    "heroes-nydus-gen": "dist/bin/nydusgen.js"
+    "heroes-nydus-gen": "dist/src/bin/nydusgen.js"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.14",

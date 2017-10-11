@@ -10,7 +10,8 @@
         "max-line-length": false,
         "max-classes-per-file": false,
         "no-bitwise": false,
-        "ban-types": false
+        "ban-types": false,
+        "object-literal-sort-keys": false
     },
     "rulesDirectory": []
 }
