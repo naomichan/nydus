@@ -1,3 +1,3 @@
 # nydus
 
-A HeroProtocol adapter for JS written in TypeScript, 100% generated.
+A HeroProtocol/S2Protocol adapter for JS written in TypeScript, mostly generated.
