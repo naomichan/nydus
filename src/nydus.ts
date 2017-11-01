@@ -3,11 +3,13 @@
 // Goal: Main parser file
 //
 
-import { MPQArchive } from "mpyqjs";
+import { MPQArchive } from "mpyqjs/mpyq";
 import { resolve } from "path";
 import * as HERO from "../def/heroes";
 import * as S2 from "../def/s2";
+import { BitPackedDecoder } from "./bitbuffer";
 import { Latest, Overmind } from "./tool/heroprotoc";
+import { VersionedDecoder } from "./versioned";
 
 export enum GameType {
   HERO = 0,
@@ -19,16 +21,22 @@ export class Replay {
   public mpq: MPQArchive;
   public protocol: NYDUS_PROTOCOL;
   public attributes: NYDUS_ATTRIBUTES;
+  public header: any;
 
   constructor(file: string, protocol: NYDUS_PROTOCOL, attrib: NYDUS_ATTRIBUTES) {
     this.mpq = new MPQArchive(file);
+    const decoder = new VersionedDecoder(this.mpq.header.userDataHeader.content, protocol.TYPE_INFO);
+    this.header = decoder.instance(protocol.REPLAY[2]);
+  }
+
+  public parseDetails(): any {
+    return null;
   }
 }
 
 export class Parser {
   protected gameType: GameType;
   protected defDir: string = resolve(__dirname, "../def/");
-  protected attrFile: string = resolve(__dirname, "../def/");
 
   protected LATEST_PROTO: NYDUS_PROTOCOL | null;
 
@@ -40,10 +48,8 @@ export class Parser {
       this.gameType = decl;
       if(this.gameType === GameType.HERO) {
         this.defDir = resolve(this.defDir, "heroes");
-        this.attrFile = resolve(this.defDir, "heroes.js");
       } else if(this.gameType === GameType.S2) {
         this.defDir = resolve(this.defDir, "s2");
-        this.attrFile = resolve(this.defDir, "s2.js");
       }
     }
   }
@@ -56,10 +62,6 @@ export class Parser {
     this.defDir = defDir;
   }
 
-  public setAttributeFile(attrFile: string): void {
-    this.attrFile = attrFile;
-  }
-
   public async reload(): Promise<void> {
     this.LATEST_PROTO = await Latest(this.defDir);
     if(this.LATEST_PROTO == null) {
@@ -68,11 +70,10 @@ export class Parser {
     return;
   }
 
-  public async loadReplay(replayFile: string): Promise<Replay> {
+  public async loadReplay(replayFile: string, attrib: NYDUS_ATTRIBUTES = {}): Promise<Replay> {
     if(this.LATEST_PROTO == null) {
       throw new Error("Missing base protocol info, call reload first.");
     }
-    let attrib: NYDUS_ATTRIBUTES = {};
     if(this.gameType === GameType.HERO) {
       attrib = HERO.ATTRIBUTES;
     } else if(this.gameType === GameType.S2) {

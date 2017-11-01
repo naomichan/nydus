@@ -8,11 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mpyqjs_1 = require("mpyqjs");
+const mpyq_1 = require("mpyqjs/mpyq");
 const path_1 = require("path");
 const HERO = require("../def/heroes");
 const S2 = require("../def/s2");
 const heroprotoc_1 = require("./tool/heroprotoc");
+const versioned_1 = require("./versioned");
 var GameType;
 (function (GameType) {
     GameType[GameType["HERO"] = 0] = "HERO";
@@ -21,14 +22,18 @@ var GameType;
 })(GameType = exports.GameType || (exports.GameType = {}));
 class Replay {
     constructor(file, protocol, attrib) {
-        this.mpq = new mpyqjs_1.MPQArchive(file);
+        this.mpq = new mpyq_1.MPQArchive(file);
+        const decoder = new versioned_1.VersionedDecoder(this.mpq.header.userDataHeader.content, protocol.TYPE_INFO);
+        this.header = decoder.instance(protocol.REPLAY[2]);
+    }
+    parseDetails() {
+        return null;
     }
 }
 exports.Replay = Replay;
 class Parser {
     constructor(decl) {
         this.defDir = path_1.resolve(__dirname, "../def/");
-        this.attrFile = path_1.resolve(__dirname, "../def/");
         if (typeof decl === "string") {
             this.defDir = decl;
             this.gameType = GameType.ANY;
@@ -37,11 +42,9 @@ class Parser {
             this.gameType = decl;
             if (this.gameType === GameType.HERO) {
                 this.defDir = path_1.resolve(this.defDir, "heroes");
-                this.attrFile = path_1.resolve(this.defDir, "heroes.js");
             }
             else if (this.gameType === GameType.S2) {
                 this.defDir = path_1.resolve(this.defDir, "s2");
-                this.attrFile = path_1.resolve(this.defDir, "s2.js");
             }
         }
     }
@@ -50,9 +53,6 @@ class Parser {
     }
     setDefinitionDirectory(defDir) {
         this.defDir = defDir;
-    }
-    setAttributeFile(attrFile) {
-        this.attrFile = attrFile;
     }
     reload() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -63,12 +63,11 @@ class Parser {
             return;
         });
     }
-    loadReplay(replayFile) {
+    loadReplay(replayFile, attrib = {}) {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.LATEST_PROTO == null) {
                 throw new Error("Missing base protocol info, call reload first.");
             }
-            let attrib = {};
             if (this.gameType === GameType.HERO) {
                 attrib = HERO.ATTRIBUTES;
             }
@@ -80,5 +79,6 @@ class Parser {
     }
 }
 exports.Parser = Parser;
+console.log(__dirname);
 exports.default = { Parser };
 //# sourceMappingURL=nydus.js.map
