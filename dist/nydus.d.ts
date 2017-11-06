@@ -9,7 +9,9 @@ export declare class Replay {
     protocol: NYDUS_PROTOCOL | null;
     attributes: NYDUS_ATTRIBUTES;
     header: any;
+    parent: Parser;
     constructor(file: string, protocol: NYDUS_PROTOCOL, attrib: NYDUS_ATTRIBUTES, parent: Parser);
+    loadProtocol(): Promise<boolean>;
     ready(): boolean;
     parseDetails(): any;
     parseInitData(): any;

@@ -22,6 +22,7 @@ export class Replay {
   public protocol: NYDUS_PROTOCOL | null;
   public attributes: NYDUS_ATTRIBUTES;
   public header: any;
+  public parent: Parser;
 
   constructor(file: string, protocol: NYDUS_PROTOCOL, attrib: NYDUS_ATTRIBUTES, parent: Parser) {
     this.attributes = attrib;
@@ -29,15 +30,16 @@ export class Replay {
     const decoder = new VersionedDecoder(this.mpq.header.userDataHeader.content, protocol.TYPE_INFO);
     this.header = decoder.instance(protocol.REPLAY[2]);
     this.protocol = null;
-    const self = this;
-    parent.loadProtocol(this.header.m_version.m_baseBuild).then((newProtocol) => {
-      if(newProtocol == null) {
-        throw new Error(`No protocol version ${this.header.m_version.m_baseBuild}`);
-      }
-      self.protocol = newProtocol;
-    }).catch((err) => {
-      throw err;
-    });
+    this.parent = parent;
+  }
+
+  public async loadProtocol(): Promise<boolean> {
+    try {
+      await this.parent.loadProtocol(this.header.m_version.m_baseBuild);
+    } catch {
+      return false;
+    }
+    return true;
   }
 
   public ready(): boolean {
@@ -46,7 +48,7 @@ export class Replay {
 
   public parseDetails(): any {
     if(!this.ready()) {
-      throw new Error("Wait until ready()");
+      throw new Error("Call loadProtocol()");
     }
     if(this.protocol != null) {
       const decoder = new VersionedDecoder(this.mpq.readFile("replay.details", false), this.protocol.TYPE_INFO);

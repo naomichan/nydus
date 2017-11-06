@@ -28,14 +28,17 @@ class Replay {
         const decoder = new versioned_1.VersionedDecoder(this.mpq.header.userDataHeader.content, protocol.TYPE_INFO);
         this.header = decoder.instance(protocol.REPLAY[2]);
         this.protocol = null;
-        const self = this;
-        parent.loadProtocol(this.header.m_version.m_baseBuild).then((newProtocol) => {
-            if (newProtocol == null) {
-                throw new Error(`No protocol version ${this.header.m_version.m_baseBuild}`);
+        this.parent = parent;
+    }
+    loadProtocol() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.parent.loadProtocol(this.header.m_version.m_baseBuild);
             }
-            self.protocol = newProtocol;
-        }).catch((err) => {
-            throw err;
+            catch (_a) {
+                return false;
+            }
+            return true;
         });
     }
     ready() {
@@ -43,7 +46,7 @@ class Replay {
     }
     parseDetails() {
         if (!this.ready()) {
-            throw new Error("Wait until ready()");
+            throw new Error("Call loadProtocol()");
         }
         if (this.protocol != null) {
             const decoder = new versioned_1.VersionedDecoder(this.mpq.readFile("replay.details", false), this.protocol.TYPE_INFO);
