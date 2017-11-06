@@ -127,8 +127,8 @@ class Replay {
             return 0;
         }
         const deltaObj = decoder.instance(this.protocol.REPLAY[0]);
-        for (const key of deltaObj) {
-            return deltaObj[key];
+        if (Object.keys(deltaObj).length > 0) {
+            return deltaObj[Object.keys(deltaObj)[0]];
         }
         return 0;
     }
@@ -161,6 +161,7 @@ class Replay {
             }
             decoder.byteAlign();
             event._bits = decoder.usedBits() - startBits;
+            onEvent(event);
         }
     }
 }
@@ -214,7 +215,7 @@ class Parser {
     }
     loadProtocol(version) {
         return __awaiter(this, void 0, void 0, function* () {
-            return heroprotoc_1.Overmind(this.defDir, version, this.shouldDownloadProtocol);
+            return yield heroprotoc_1.Overmind(this.defDir, version, this.shouldDownloadProtocol);
         });
     }
 }

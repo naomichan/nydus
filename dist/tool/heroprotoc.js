@@ -20,8 +20,10 @@ function Overmind(dir, version, shouldDownload = false) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const fd = path_1.resolve(dir, `protocol${version}.js`);
-            if (yield existsAsync(fd)) {
+            try {
                 return require(fd);
+            }
+            catch (_a) {
             }
             if (!shouldDownload) {
                 return null;
@@ -33,7 +35,7 @@ function Overmind(dir, version, shouldDownload = false) {
             yield writeFileAsync(fd, Generate(response.body, version));
             return require(fd);
         }
-        catch (_a) {
+        catch (ex) {
             return null;
         }
     });

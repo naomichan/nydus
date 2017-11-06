@@ -20,8 +20,10 @@ const writeFileAsync = promisify(writeFile);
 export async function Overmind(dir: string, version: number, shouldDownload: boolean = false): Promise<NYDUS_PROTOCOL | null> {
     try {
       const fd: string = resolve(dir, `protocol${version}.js`);
-      if(await existsAsync(fd)) {
+      try {
         return require(fd);
+      } catch {
+        //
       }
       if(!shouldDownload) {
         return null;
@@ -32,7 +34,7 @@ export async function Overmind(dir: string, version: number, shouldDownload: boo
       }
       await writeFileAsync(fd, Generate(response.body, version));
       return require(fd);
-    } catch {
+    } catch(ex) {
       return null;
     }
 }

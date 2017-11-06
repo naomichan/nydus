@@ -136,8 +136,8 @@ export class Replay {
       return 0;
     }
     const deltaObj = decoder.instance(this.protocol.REPLAY[0]);
-    for(const key of deltaObj) {
-      return deltaObj[key];
+    if(Object.keys(deltaObj).length > 0) {
+      return deltaObj[Object.keys(deltaObj)[0]];
     }
     return 0;
   }
@@ -175,6 +175,7 @@ export class Replay {
       }
       decoder.byteAlign();
       event._bits = decoder.usedBits() - startBits;
+      onEvent(event);
     }
   }
 }
@@ -231,7 +232,7 @@ export class Parser {
   }
 
   public async loadProtocol(version: number): Promise<NYDUS_PROTOCOL | null> {
-    return Overmind(this.defDir, version, this.shouldDownloadProtocol);
+    return await Overmind(this.defDir, version, this.shouldDownloadProtocol);
   }
 }
 
