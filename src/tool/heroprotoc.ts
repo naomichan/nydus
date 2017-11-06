@@ -28,7 +28,7 @@ export async function Overmind(dir: string, version: number, shouldDownload: boo
       if(!shouldDownload) {
         return null;
       }
-      const response: req.RequestResponse = await request({url: `https://raw.githubusercontent.com/Blizzard/heroprotocol/master/protocol${version}.py`, method: "GET"});
+      const response: req.RequestResponse = await request({url: `https://raw.githubusercontent.com/Blizzard/heroprotocol/master/protocol${version}.py`, method: "GET", headers: {"User-Agent": "nydus=1.0.0;node;request"}});
       if(response.statusCode !== 200) {
         return null;
       }

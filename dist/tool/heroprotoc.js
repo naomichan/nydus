@@ -28,7 +28,7 @@ function Overmind(dir, version, shouldDownload = false) {
             if (!shouldDownload) {
                 return null;
             }
-            const response = yield request({ url: `https://raw.githubusercontent.com/Blizzard/heroprotocol/master/protocol${version}.py`, method: "GET" });
+            const response = yield request({ url: `https://raw.githubusercontent.com/Blizzard/heroprotocol/master/protocol${version}.py`, method: "GET", headers: { "User-Agent": "nydus=1.0.0;node;request" } });
             if (response.statusCode !== 200) {
                 return null;
             }
