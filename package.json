@@ -1,0 +1,9 @@
+{
+  "name": "@types/nydus",
+  "version": "1.0.0",
+  "description": "A HeroProtocol adapter for JS written in TypeScript",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/naomichan/nydus.git"
+  }
+}

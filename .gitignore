@@ -1,0 +1,3 @@
+node_modules
+def/*.js
+src/**/*.js

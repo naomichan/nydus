@@ -1,0 +1,6 @@
+[submodule "def/s2/protocol"]
+	path = def/s2/protocol
+	url = https://github.com/Blizzard/s2protocol.git
+[submodule "def/heroes/protocol"]
+	path = def/heroes/protocol
+	url = https://github.com/Blizzard/heroprotocol.git
