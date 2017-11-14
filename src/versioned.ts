@@ -23,7 +23,7 @@ export class VersionedDecoder {
 
   public instance(typeId: number): any {
     if(typeId >= this.typeInfos.length) {
-      throw new NydusError.CorruptedError();
+      throw new NydusError.CorruptedError(`typeId ${typeId} is outside of typeInfo range ${this.typeInfos.length}`);
     }
     const typeInfo: [string, any[]] = this.typeInfos[typeId];
     return this[typeInfo[0]](...typeInfo[1]);
@@ -42,8 +42,9 @@ export class VersionedDecoder {
   }
 
   public _expect_skip(expected: number): void {
-    if(this.buffer.readBits(8) !== expected) {
-      throw new NydusError.CorruptedError();
+    const bits = this.buffer.readBits(8);
+    if(bits !== expected) {
+      throw new NydusError.CorruptedError(`Expected ${expected}, got ${bits}`);
     }
   }
 

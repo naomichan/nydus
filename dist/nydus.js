@@ -33,7 +33,7 @@ class Replay {
     loadProtocol() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield this.parent.loadProtocol(this.header.m_version.m_baseBuild);
+                this.protocol = yield this.parent.loadProtocol(this.header.m_version.m_baseBuild);
             }
             catch (_a) {
                 return false;
@@ -59,7 +59,7 @@ class Replay {
             throw new Error("Wait until ready()");
         }
         if (this.protocol != null) {
-            const decoder = new versioned_1.VersionedDecoder(this.mpq.readFile("replay.initData", false), this.protocol.TYPE_INFO);
+            const decoder = new bitbuffer_1.BitPackedDecoder(this.mpq.readFile("replay.initData", false), this.protocol.TYPE_INFO);
             return decoder.instance(this.protocol.REPLAY[4]);
         }
         return null;

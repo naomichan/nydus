@@ -13,7 +13,7 @@ class VersionedDecoder {
     }
     instance(typeId) {
         if (typeId >= this.typeInfos.length) {
-            throw new NydusError.CorruptedError();
+            throw new NydusError.CorruptedError(`typeId ${typeId} is outside of typeInfo range ${this.typeInfos.length}`);
         }
         const typeInfo = this.typeInfos[typeId];
         return this[typeInfo[0]](...typeInfo[1]);
@@ -28,8 +28,9 @@ class VersionedDecoder {
         return this.buffer.usedBits();
     }
     _expect_skip(expected) {
-        if (this.buffer.readBits(8) !== expected) {
-            throw new NydusError.CorruptedError();
+        const bits = this.buffer.readBits(8);
+        if (bits !== expected) {
+            throw new NydusError.CorruptedError(`Expected ${expected}, got ${bits}`);
         }
     }
     _vint() {

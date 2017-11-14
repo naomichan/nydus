@@ -35,7 +35,7 @@ export class Replay {
 
   public async loadProtocol(): Promise<boolean> {
     try {
-      await this.parent.loadProtocol(this.header.m_version.m_baseBuild);
+      this.protocol = await this.parent.loadProtocol(this.header.m_version.m_baseBuild);
     } catch {
       return false;
     }
@@ -62,7 +62,7 @@ export class Replay {
       throw new Error("Wait until ready()");
     }
     if(this.protocol != null) {
-      const decoder = new VersionedDecoder(this.mpq.readFile("replay.initData", false), this.protocol.TYPE_INFO);
+      const decoder = new BitPackedDecoder(this.mpq.readFile("replay.initData", false), this.protocol.TYPE_INFO);
       return decoder.instance(this.protocol.REPLAY[4]);
     }
     return null;
