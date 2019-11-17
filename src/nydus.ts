@@ -191,6 +191,7 @@ export class Parser {
   protected shouldDownloadProtocol: boolean;
 
   constructor(decl: GameType | string, shouldDownload: boolean = true) {
+    this.LATEST_PROTO = null;
     if(typeof decl === "string") {
       this.defDir = decl;
       this.gameType = GameType.ANY;
