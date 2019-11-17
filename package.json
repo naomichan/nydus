@@ -27,10 +27,10 @@
     "heroes-nydus-gen": "dist/bin/nydusgen.js"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.18",
-    "@types/node": "^8.0.48",
-    "@types/request": "^2.0.7",
-    "typescript": "^2.6.1"
+    "@types/bluebird": "^3.5.29",
+    "@types/node": "^8.10.59",
+    "@types/request": "^2.48.3",
+    "typescript": "^2.9.2"
   },
   "typeScriptVersion": "2.5",
   "dependencies": {
